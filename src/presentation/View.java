@@ -19,6 +19,7 @@ import business.Performance;
 
 import java.util.List;
 import java.util.Scanner;
+
 public class View {
 
     private Scanner scanner;
