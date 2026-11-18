@@ -3,9 +3,17 @@ package business;
 import persistence.AthleteJSONDAO;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class AthleteManager {
+
+    private static final DateTimeFormatter DATE_FORMAT =
+            DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT);
 
     private AthleteJSONDAO dao;
 
@@ -13,37 +21,130 @@ public class AthleteManager {
         this.dao = dao;
     }
 
+    /**
+     * Convierte un texto dd/MM/aaaa en fecha.
+     * @param texto fecha escrita por el usuario
+     * @return la fecha, o null si no es una fecha válida
+     */
     public LocalDate validarFechaNacimiento(String texto) {
-        // TODO
-        return null;
+        try {
+            return LocalDate.parse(texto.trim(), DATE_FORMAT);
+        } catch (DateTimeParseException e) {
+            return null;
+        }
     }
 
+    /**
+     * Convierte la opción del menú de perfiles en un Profile.
+     * @param opcion 1 Balanced, 2 Power, 3 Endurance, 4 Technical
+     * @return el perfil, o null si la opción no es válida
+     */
     public Profile perfilAtleta(int opcion) {
-        // TODO
-        return null;
+        switch (opcion) {
+            case 1:
+                return Profile.BALANCED;
+            case 2:
+                return Profile.POWER;
+            case 3:
+                return Profile.ENDURANCE;
+            case 4:
+                return Profile.TECHNICAL;
+            default:
+                return null;
+        }
     }
 
+    /**
+     * Crea un atleta nuevo (id y atributos automáticos) y lo guarda.
+     * @param nombre nombre del atleta
+     * @param fechaNacimiento fecha de nacimiento
+     * @param codigoDelegacion código de su delegación
+     * @param perfil perfil del atleta
+     * @return el atleta guardado, o null si ya existe uno con ese nombre en la delegación
+     */
     public Athlete guardarAtleta(String nombre, LocalDate fechaNacimiento, String codigoDelegacion, Profile perfil) {
-        // TODO
-        return null;
+        List<Athlete> athletes = dao.cargarAtletas();
+
+        for (Athlete athlete : athletes) {
+            if (athlete.getDelegationCode().equals(codigoDelegacion)
+                    && athlete.getName().equalsIgnoreCase(nombre)) {
+                return null;
+            }
+        }
+
+        Random random = new Random();
+        Athlete newAthlete = new Athlete(nextId(athletes), nombre, fechaNacimiento, codigoDelegacion, perfil,
+                randomAttribute(random), randomAttribute(random), randomAttribute(random),
+                randomAttribute(random), randomAttribute(random));
+        dao.escribirAtleta(newAthlete);
+        return newAthlete;
     }
 
+    /**
+     * Busca atletas cuyo nombre contenga el texto (sin distinguir mayúsculas).
+     * @param texto texto a buscar; vacío devuelve todos los atletas
+     * @return atletas que coinciden
+     */
     public List<Athlete> buscarAtletas(String texto) {
-        // TODO
-        return null;
+        List<Athlete> found = new ArrayList<>();
+        for (Athlete athlete : dao.cargarAtletas()) {
+            if (athlete.getName().toLowerCase().contains(texto.toLowerCase())) {
+                found.add(athlete);
+            }
+        }
+        return found;
     }
 
+    /**
+     * Devuelve los atletas de una delegación.
+     * @param codigoDelegacion código de la delegación
+     * @return atletas de esa delegación
+     */
     public List<Athlete> atletasDeDelegacion(String codigoDelegacion) {
-        // TODO
-        return null;
+        List<Athlete> found = new ArrayList<>();
+        for (Athlete athlete : dao.cargarAtletas()) {
+            if (athlete.getDelegationCode().equals(codigoDelegacion)) {
+                found.add(athlete);
+            }
+        }
+        return found;
     }
 
+    /**
+     * Elimina un atleta del sistema.
+     * @param idAtleta identificador del atleta
+     */
     public void borrarAtleta(String idAtleta) {
-        // TODO
+        dao.eliminarAtleta(idAtleta);
     }
 
+    /**
+     * Busca un atleta por su identificador.
+     * @param idAtleta identificador del atleta
+     * @return el atleta, o null si no existe
+     */
     public Athlete buscarPorId(String idAtleta) {
-        // TODO
+        for (Athlete athlete : dao.cargarAtletas()) {
+            if (athlete.getId().equals(idAtleta)) {
+                return athlete;
+            }
+        }
         return null;
+    }
+
+    // El id nuevo es el mayor número que haya en el fichero más uno
+    private String nextId(List<Athlete> athletes) {
+        int max = 0;
+        for (Athlete athlete : athletes) {
+            int number = Integer.parseInt(athlete.getId().substring(4));
+            if (number > max) {
+                max = number;
+            }
+        }
+        return String.format("ATH-%03d", max + 1);
+    }
+
+    private int randomAttribute(Random random) {
+        return random.nextInt(100) + 1;
     }
 }
