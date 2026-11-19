@@ -12,6 +12,7 @@ import java.util.Random;
 
 public class AthleteManager {
 
+    //formato dd/MM/aaaa en modo estricto, asi el 31/02 no vale
     private static final DateTimeFormatter DATE_FORMAT =
             DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT);
 
@@ -65,6 +66,7 @@ public class AthleteManager {
     public Athlete guardarAtleta(String nombre, LocalDate fechaNacimiento, String codigoDelegacion, Profile perfil) {
         List<Athlete> athletes = dao.cargarAtletas();
 
+        //si ya hay uno con ese nombre en la delegacion no se guarda
         for (Athlete athlete : athletes) {
             if (athlete.getDelegationCode().equals(codigoDelegacion)
                     && athlete.getName().equalsIgnoreCase(nombre)) {
@@ -72,6 +74,7 @@ public class AthleteManager {
             }
         }
 
+        //el id aleatorio pero en orden de uno en uno crece y los 5 atributos
         Random random = new Random();
         Athlete newAthlete = new Athlete(nextId(athletes), nombre, fechaNacimiento, codigoDelegacion, perfil, randomAttribute(random), randomAttribute(random), randomAttribute(random), randomAttribute(random), randomAttribute(random));
         dao.escribirAtleta(newAthlete);
@@ -100,6 +103,7 @@ public class AthleteManager {
      */
     public List<Athlete> atletasDeDelegacion(String codigoDelegacion) {
         List<Athlete> found = new ArrayList<>();
+        //nos quedamos solo con los de esa delegacion
         for (Athlete athlete : dao.cargarAtletas()) {
             if (athlete.getDelegationCode().equals(codigoDelegacion)) {
                 found.add(athlete);
@@ -130,10 +134,11 @@ public class AthleteManager {
         return null;
     }
 
-    // El id nuevo es el mayor número que haya en el fichero más uno
+    //el id nuevo es el mayor que haya en el fichero mas uno
     private String nextId(List<Athlete> athletes) {
         int max = 0;
         for (Athlete athlete : athletes) {
+            //substring(4) quita el id y deja solo el numero
             int number = Integer.parseInt(athlete.getId().substring(4));
             if (number > max) {
                 max = number;

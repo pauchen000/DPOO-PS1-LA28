@@ -23,10 +23,12 @@ public class AthleteJSONDAO {
     public List<Athlete> cargarAtletas() {
         List<Athlete> athletes = new ArrayList<>();
         File file = new File(ATHLETES_FILE);
+        //si el fichero aun no existe es que todavia no hay atletas
         if (!file.exists()) {
             return athletes;
         }
         try (FileReader reader = new FileReader(file)) {
+            //leemos el json como un array y pasamos cada elemento a athlete
             JsonArray array = JsonParser.parseReader(reader).getAsJsonArray();
             for (JsonElement element : array) {
                 athletes.add(toAthlete(element.getAsJsonObject()));
@@ -42,6 +44,7 @@ public class AthleteJSONDAO {
      * @param atleta atleta a guardar
      */
     public void escribirAtleta(Athlete atleta) {
+        //cargamos todos, anadimos el nuevo y reescribimos el fichero entero
         List<Athlete> athletes = cargarAtletas();
         athletes.add(atleta);
         writeAll(athletes);
@@ -62,7 +65,7 @@ public class AthleteJSONDAO {
         writeAll(remaining);
     }
 
-    // Gson no sabe leer un LocalDate, así que se construye el Athlete campo a campo
+    //cada campo se lee a mano
     private Athlete toAthlete(JsonObject object) {
         return new Athlete(
                 object.get("id").getAsString(),
@@ -101,7 +104,6 @@ public class AthleteJSONDAO {
         try (FileWriter writer = new FileWriter(ATHLETES_FILE)) {
             gson.toJson(array, writer);
         } catch (IOException e) {
-            // La persistencia no puede mostrar mensajes: si falla, el fichero queda como estaba
         }
     }
 }

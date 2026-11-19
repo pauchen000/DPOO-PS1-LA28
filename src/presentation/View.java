@@ -12,6 +12,7 @@ import java.util.Scanner;
 
 public class View {
 
+    //para leer loq escrib ele usuario
     private Scanner scanner;
 
     public View() {
@@ -25,6 +26,7 @@ public class View {
      * @return la opción elegida
      */
     public int leerOpcion(int min, int max) {
+        //no sale del bucle hasta que el numero este dentro del rango
         while (true) {
             System.out.print("Choose an option: ");
             try {
@@ -34,8 +36,10 @@ public class View {
                 }
                 mostrarError("Wrong option. Enter a number from " + min + " to " + max + ".");
             } catch (InputMismatchException e) {
+                //si escribe letras nextInt falla y entra aqui
                 mostrarError("Wrong option. Enter a number from " + min + " to " + max + ".");
             } finally {
+                //limpia el salto de linea que deja nextInt, si no se colaria en la siguiente lectura
                 scanner.nextLine();
             }
         }
@@ -78,6 +82,7 @@ public class View {
         mostrarMensaje("    1) Delegations");
         mostrarMensaje("    2) Athletes");
         mostrarMensaje("    3) Competitions");
+        //la única linea que cambia es la 4, segun haya competiciones o no
         if (simulacionDisponible) {
             mostrarMensaje("    4) Simulate Olympic Games");
         } else {
@@ -87,6 +92,7 @@ public class View {
         mostrarMensaje("    0) Exit");
         mostrarMensaje("");
 
+        //leerOpcion ya se encarga de que sea un numero de 0 a 4
         return leerOpcion(0, 4);
     }
 
@@ -134,12 +140,14 @@ public class View {
         mostrarMensaje("");
         for (int i = 0; i < delegaciones.size(); i++) {
             Delegation delegation = delegaciones.get(i);
+            //i+1 porque en pantalla se empieza a contar en 1 y en la lista de java en 0
             mostrarMensaje("    " + (i + 1) + ") " + delegation.getCode() + " " + delegation.getName());
         }
         mostrarMensaje("");
         mostrarMensaje("    0) Back");
         mostrarMensaje("");
 
+        //el rango va de 0 (volver) hasta la ultima delegacion
         return leerOpcion(0, delegaciones.size());
     }
 
@@ -149,6 +157,7 @@ public class View {
      * @param atletas atletas que pertenecen a la delegación
      */
     public void mostrarDelegacion(Delegation delegacion, List<Athlete> atletas) {
+        //cabecera con el codigo y el nombre, y debajo las tres medallas
         mostrarMensaje("");
         mostrarMensaje("-| " + delegacion.getCode() + " | " + delegacion.getName() + " |-");
         mostrarMensaje("    Gold: " + delegacion.getGoldMedals());
@@ -157,6 +166,7 @@ public class View {
         mostrarMensaje("");
         mostrarMensaje("    " + atletas.size() + " athletes");
         mostrarMensaje("    ----------");
+        //mostrat un atleta por linea
         for (Athlete athlete : atletas) {
             mostrarMensaje("    " + athlete.getName());
         }
@@ -167,15 +177,18 @@ public class View {
      * @param delegaciones delegaciones ya ordenadas por medallas
      */
     public void mostrarMedallero(List<Delegation> delegaciones) {
+        //linea separadora de la tabla y con el ancho de cada columna
         String line = "+" + "-".repeat(9) + "+" + "-".repeat(52) + "+" + "-".repeat(4) + "+"
                 + "-".repeat(6) + "+" + "-".repeat(6) + "+";
 
         mostrarMensaje("");
         mostrarMensaje(line);
+        //%-7s alinea a la izquierda y %4s a la derecha, asi las columnas cuadran
         mostrarMensaje(String.format("| %-7s | %-50s |%4s|%6s|%6s|", "Code", "Delegation", "Gold", "Silver", "Bronze"));
         mostrarMensaje(line);
         for (Delegation delegation : delegaciones) {
             String name = delegation.getName();
+            //si el nombre es muy largo se corta para no descuadrar la tabla
             if (name.length() > 50) {
                 name = name.substring(0, 47) + "...";
             }
@@ -200,6 +213,7 @@ public class View {
      * @return el texto escrito
      */
     public String pedirFecha() {
+        //pedri la fecha de nacimiento
         System.out.print("Date of birth (DD/MM/YYYY): ");
         return scanner.nextLine();
     }
@@ -222,9 +236,11 @@ public class View {
         mostrarMensaje("");
 
         int option = leerOpcion(0, delegaciones.size());
+        //0 es cancelar, asi que no hay delegacion que devolver
         if (option == 0) {
             return null;
         }
+        //option-1 pasa de la posicion de pantalla al indice de la lista
         return delegaciones.get(option - 1);
     }
 
@@ -244,6 +260,7 @@ public class View {
         mostrarMensaje("    0) Cancel");
         mostrarMensaje("");
 
+        //solo devuelve el numero es el manager q lo convierte en perfil
         return leerOpcion(0, 4);
     }
 
@@ -254,6 +271,7 @@ public class View {
     public String pedirBusqueda() {
         mostrarMensaje("");
         System.out.print("Enter a search term or press ENTER to show all athletes: ");
+        //si pulsa enter sin escribir, nextLine devuelve texto vacio
         return scanner.nextLine();
     }
 
@@ -265,6 +283,7 @@ public class View {
      */
     public Athlete elegirAtleta(List<Athlete> atletas, List<Delegation> delegaciones) {
         mostrarMensaje("");
+        //si la busqueda no ha encontrado hay mensaje de error
         if (atletas.isEmpty()) {
             mostrarMensaje("No athletes found.");
             return null;
@@ -272,6 +291,7 @@ public class View {
 
         for (int i = 0; i < atletas.size(); i++) {
             Athlete athlete = atletas.get(i);
+            //junto a cada atleta se pone el nombre de su delegacion
             mostrarMensaje("    " + (i + 1) + ") " + athlete.getName() + " - "
                     + delegationName(athlete.getDelegationCode(), delegaciones));
         }
@@ -292,6 +312,7 @@ public class View {
      * @param delegacion delegación del atleta
      */
     public void mostrarAtleta(Athlete atleta, Delegation delegacion) {
+        //pasa de TECHNICAL a solo la primera letra tal cual y el resto en minuscula
         String profile = atleta.getProfile().name().charAt(0)
                 + atleta.getProfile().name().substring(1).toLowerCase();
 
@@ -317,6 +338,7 @@ public class View {
      * @return true si responde y, false si responde n
      */
     public boolean pedirConfirmacion(String mensaje) {
+        //no sale del bucle hasta que conteste y o n
         while (true) {
             mostrarMensaje("");
             System.out.print(mensaje + " (y/n): ");
@@ -332,12 +354,14 @@ public class View {
         }
     }
 
+    //busca el nombre de una delegacion a partir de su codigo
     private String delegationName(String code, List<Delegation> delegaciones) {
         for (Delegation delegation : delegaciones) {
             if (delegation.getCode().equals(code)) {
                 return delegation.getName();
             }
         }
+        //si no la encuentra devuelve el propio codigo
         return code;
     }
 }

@@ -11,6 +11,7 @@ import persistence.DelegationJSONDAO;
 public class Main {
 
     public static void main(String[] args) {
+        //en el orden en el qu se usa que sino hay problemas cuando se compila y no funciona
         DelegationJSONDAO delegationDAO = new DelegationJSONDAO();
         DelegationManager delegationManager = new DelegationManager(delegationDAO);
 
@@ -24,6 +25,7 @@ public class Main {
         View view = new View();
         Controller controller = new Controller(view, delegationManager, athleteManager, competitionManager);
 
+        //si los ficheros estan bien arranca pero si no el programa termina
         if (controller.comprobarFicheros()) {
             controller.run();
         }

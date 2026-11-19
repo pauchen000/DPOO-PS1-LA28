@@ -61,6 +61,7 @@ public class Delegation {
      * @param medal tipo de medalla a sumar
      */
     public void addMedal(Medal medal) {
+        //segun el tipo de medalla, sube en uno el contador que toca
         switch (medal) {
             case GOLD -> goldMedals++;
             case SILVER -> silverMedals++;
@@ -73,8 +74,10 @@ public class Delegation {
      * @param medal tipo de medalla a restar
      */
     public void removeMedal(Medal medal) {
+        //igual que addMedal pero restando, y solo si queda alguna
         switch (medal) {
             case GOLD -> {
+                //el if evita que el contador baje de cero
                 if (goldMedals > 0) {
                     goldMedals--;
                 }
@@ -96,6 +99,7 @@ public class Delegation {
      * Pone a cero todas las medallas de la delegación.
      */
     public void resetMedals() {
+        //volvemos a empezar de cero con los tres contadores
         goldMedals = 0;
         silverMedals = 0;
         bronzeMedals = 0;
