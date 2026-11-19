@@ -49,7 +49,20 @@ public class Controller {
     }
 
     public boolean comprobarFicheros() {
-        // TODO
+        view.mostrarMensaje("Welcome to LA28 Games Lab.");
+        view.mostrarMensaje("The Olympics Simulator.");
+        view.mostrarMensaje("");
+        view.mostrarMensaje("Verifying local files...");
+
+        // Solo delegations.json es obligatorio: los otros dos se crean al guardar el primer dato
+        if (delegationManager.comprobarFichero()) {
+            view.mostrarMensaje("Files OK.");
+            view.mostrarMensaje("Starting program...");
+            return true;
+        }
+
+        view.mostrarError("The delegations.json file can't be accessed.");
+        view.mostrarMensaje("Shutting down...");
         return false;
     }
 

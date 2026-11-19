@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ClaudeCodeEditorTabs">
-    <option name="activeSessionId" value="a2226f57-1c0a-4612-aff6-4c319978d1b4" />
+    <option name="activeSessionId" value="956e1b98-95fc-474a-82ea-5613e4fc22d7" />
     <option name="openSessionIds">
       <list>
         <option value="a2226f57-1c0a-4612-aff6-4c319978d1b4" />
+        <option value="956e1b98-95fc-474a-82ea-5613e4fc22d7" />
       </list>
     </option>
     <option name="sessionPaths">
       <map>
+        <entry key="956e1b98-95fc-474a-82ea-5613e4fc22d7" value="/sessions/5887bfa8-b602-433e-8d0c-dd027865dc32" />
         <entry key="a2226f57-1c0a-4612-aff6-4c319978d1b4" value="/sessions/5da2af02-e205-4a1e-96bb-2a6be2b6abf1" />
       </map>
     </option>
     <option name="sessionTitles">
       <map>
-        <entry key="a2226f57-1c0a-4612-aff6-4c319978d1b4" value="$PROJECT_DIR$/../../F1F2_diagram.png /User" />
+        <entry key="956e1b98-95fc-474a-82ea-5613e4fc22d7" value="The user selected the lines 12 to 121 from /Users/" />
+        <entry key="a2226f57-1c0a-4612-aff6-4c319978d1b4" value="quiero que me hagas paso a paso este ejercicio, yo" />
       </map>
     </option>
   </component>
