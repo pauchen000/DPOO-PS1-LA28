@@ -77,20 +77,16 @@ public class Delegation {
         //igual que addMedal pero restando, y solo si queda alguna
         switch (medal) {
             case GOLD -> {
-                //el if evita que el contador baje de cero
-                if (goldMedals > 0) {
                     goldMedals--;
-                }
+                
             }
             case SILVER -> {
-                if (silverMedals > 0) {
                     silverMedals--;
-                }
+                
             }
             case BRONZE -> {
-                if (bronzeMedals > 0) {
                     bronzeMedals--;
-                }
+                
             }
         }
     }
