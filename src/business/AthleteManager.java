@@ -73,9 +73,7 @@ public class AthleteManager {
         }
 
         Random random = new Random();
-        Athlete newAthlete = new Athlete(nextId(athletes), nombre, fechaNacimiento, codigoDelegacion, perfil,
-                randomAttribute(random), randomAttribute(random), randomAttribute(random),
-                randomAttribute(random), randomAttribute(random));
+        Athlete newAthlete = new Athlete(nextId(athletes), nombre, fechaNacimiento, codigoDelegacion, perfil, randomAttribute(random), randomAttribute(random), randomAttribute(random), randomAttribute(random), randomAttribute(random));
         dao.escribirAtleta(newAthlete);
         return newAthlete;
     }

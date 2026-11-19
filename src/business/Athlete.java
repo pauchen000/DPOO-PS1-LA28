@@ -15,8 +15,7 @@ public class Athlete {
     private int technique;
     private int precision;
 
-    public Athlete(String id, String name, LocalDate birthDate, String delegationCode, Profile profile,
-                   int speed, int endurance, int strength, int technique, int precision) {
+    public Athlete(String id, String name, LocalDate birthDate, String delegationCode, Profile profile, int speed, int endurance, int strength, int technique, int precision) {
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;

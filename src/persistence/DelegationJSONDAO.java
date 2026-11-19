@@ -12,7 +12,7 @@ import java.util.List;
 
 public class DelegationJSONDAO {
 
-    public static final String DELEGATIONS_FILE = "delegations.json";
+    public static final String DELEGATIONS_FILE = "data/delegations.json";
 
     /**
      * Comprueba que el fichero existe y que su estructura JSON es correcta.

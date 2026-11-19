@@ -14,7 +14,7 @@ import java.util.List;
 
 public class AthleteJSONDAO {
 
-    public static final String ATHLETES_FILE = "athletes.json";
+    public static final String ATHLETES_FILE = "data/athletes.json";
 
     /**
      * Lee todos los atletas del fichero.
