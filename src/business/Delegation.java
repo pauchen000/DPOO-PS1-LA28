@@ -1,5 +1,8 @@
 package business;
 
+/**
+ * una delegacion de un pais: su codigo, su nombre y las medallas que lleva
+ */
 public class Delegation {
 
     private String code;
@@ -8,6 +11,14 @@ public class Delegation {
     private int silverMedals;
     private int bronzeMedals;
 
+    /**
+     * crea una delegacion con los datos que le pasamos
+     * @param code codigo de la delegacion (DLG-XXX)
+     * @param name nombre completo del pais
+     * @param goldMedals medallas de oro
+     * @param silverMedals medallas de plata
+     * @param bronzeMedals medallas de bronce
+     */
     public Delegation(String code, String name, int goldMedals, int silverMedals, int bronzeMedals) {
         this.code = code;
         this.name = name;
@@ -17,23 +28,23 @@ public class Delegation {
     }
 
     /**
-     * Devuelve el código de la delegación (formato DLG-XXX).
-     * @return el código de la delegación
+     * devuelve el codigo de la delegacion, con formato DLG-XXX
+     * @return el codigo
      */
     public String getCode() {
         return code;
     }
 
     /**
-     * Devuelve el nombre completo de la delegación.
-     * @return el nombre de la delegación
+     * saca el nombre completo del pais
+     * @return el nombre
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Devuelve el número de medallas de oro.
+     * cuantas medallas de oro lleva
      * @return medallas de oro
      */
     public int getGoldMedals() {
@@ -41,7 +52,7 @@ public class Delegation {
     }
 
     /**
-     * Devuelve el número de medallas de plata.
+     * cuantas medallas de plata lleva
      * @return medallas de plata
      */
     public int getSilverMedals() {
@@ -49,7 +60,7 @@ public class Delegation {
     }
 
     /**
-     * Devuelve el número de medallas de bronce.
+     * cuantas medallas de bronce lleva
      * @return medallas de bronce
      */
     public int getBronzeMedals() {
@@ -57,11 +68,10 @@ public class Delegation {
     }
 
     /**
-     * Suma una medalla del tipo indicado.
+     * suma uno al contador del tipo de medalla que le pasen
      * @param medal tipo de medalla a sumar
      */
     public void addMedal(Medal medal) {
-        //segun el tipo de medalla, sube en uno el contador que toca
         switch (medal) {
             case GOLD -> goldMedals++;
             case SILVER -> silverMedals++;
@@ -70,32 +80,31 @@ public class Delegation {
     }
 
     /**
-     * Resta una medalla del tipo indicado. Si ya no quedan medallas de ese tipo, no hace nada.
+     * resta uno al contador del tipo de medalla que le pasen. ojo: aqui no se mira si quedan,
+     * eso lo comprueba antes restarMedallas del manager
      * @param medal tipo de medalla a restar
      */
     public void removeMedal(Medal medal) {
-        //igual que addMedal pero restando, y solo si queda alguna
         switch (medal) {
             case GOLD -> {
                     goldMedals--;
-                
+
             }
             case SILVER -> {
                     silverMedals--;
-                
+
             }
             case BRONZE -> {
                     bronzeMedals--;
-                
+
             }
         }
     }
 
     /**
-     * Pone a cero todas las medallas de la delegación.
+     * deja las tres medallas a cero
      */
     public void resetMedals() {
-        //volvemos a empezar de cero con los tres contadores
         goldMedals = 0;
         silverMedals = 0;
         bronzeMedals = 0;

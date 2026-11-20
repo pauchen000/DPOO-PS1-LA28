@@ -12,18 +12,20 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * lee y escribe el fichero athletes.json
+ */
 public class AthleteJSONDAO {
 
     public static final String ATHLETES_FILE = "data/athletes.json";
 
     /**
-     * Lee todos los atletas del fichero.
-     * @return la lista de atletas (vacía si el fichero no existe o no se puede leer)
+     * lee todos los atletas del fichero. si todavia no existe, devuelve una lista vacia
+     * @return la lista de atletas
      */
     public List<Athlete> cargarAtletas() {
         List<Athlete> athletes = new ArrayList<>();
         File file = new File(ATHLETES_FILE);
-        //si el fichero aun no existe es que todavia no hay atletas
         if (!file.exists()) {
             return athletes;
         }
@@ -40,8 +42,8 @@ public class AthleteJSONDAO {
     }
 
     /**
-     * Añade un atleta al fichero. Si el fichero no existe, lo crea.
-     * @param atleta atleta a guardar
+     * anade un atleta al ficherocpero si el fichero no existec lo crea
+     * @param atleta el atleta que se guarda
      */
     public void escribirAtleta(Athlete atleta) {
         //cargamos todos, anadimos el nuevo y reescribimos el fichero entero
@@ -51,8 +53,8 @@ public class AthleteJSONDAO {
     }
 
     /**
-     * Borra del fichero el atleta con el identificador indicado.
-     * @param idAtleta identificador del atleta
+     * quita del fichero al atleta que tenga ese id
+     * @param idAtleta id del atleta a borrar
      */
     public void eliminarAtleta(String idAtleta) {
         List<Athlete> athletes = cargarAtletas();

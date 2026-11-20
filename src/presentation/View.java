@@ -10,23 +10,28 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * escribe los menus y los textos y lee lo que se teclea
+ */
 public class View {
 
     //para leer loq escrib ele usuario
     private Scanner scanner;
 
+    /**
+     * crea la view y deja listo el scanner para leer del teclado
+     */
     public View() {
         this.scanner = new Scanner(System.in);
     }
 
     /**
-     * Pide un número entre min y max (ambos incluidos) y lo repite hasta que sea válido.
-     * @param min opción más pequeña permitida
-     * @param max opción más grande permitida
-     * @return la opción elegida
+     * pide un numero entre min y max y lo repite hasta que valga
+     * @param min el numero mas pequeno que se acepta
+     * @param max el numero mas grande que se acepta
+     * @return la opcion elegida
      */
     public int leerOpcion(int min, int max) {
-        //no sale del bucle hasta que el numero este dentro del rango
         while (true) {
             System.out.print("Choose an option: ");
             try {
@@ -46,23 +51,23 @@ public class View {
     }
 
     /**
-     * Muestra un mensaje por pantalla.
-     * @param texto mensaje a mostrar
+     * escribe un texto en pantalla
+     * @param texto lo que se escribe
      */
     public void mostrarMensaje(String texto) {
         System.out.println(texto);
     }
 
     /**
-     * Muestra un mensaje de error por pantalla.
-     * @param texto descripción del error
+     * escribe un error en pantalla, con Error: delante
+     * @param texto que ha ido mal
      */
     public void mostrarError(String texto) {
         System.out.println("Error: " + texto);
     }
 
     /**
-     * Espera a que el usuario pulse ENTER.
+     * se para hasta que el usuario pulse enter
      */
     public void esperarEnter() {
         System.out.println();
@@ -71,9 +76,9 @@ public class View {
     }
 
     /**
-     * Muestra el menú principal y pide una opción.
-     * @param simulacionDisponible false si no hay competiciones y no se puede simular
-     * @return la opción elegida (0 a 4)
+     * dibuja el menu principal y pide la opcion
+     * @param simulacionDisponible false si no hay competiciones: la 4 sale marcada como no disponible
+     * @return la opcion elegida (0 a 4)
      */
     public int mostrarMenuPrincipal(boolean simulacionDisponible) {
         mostrarMensaje("");
@@ -82,7 +87,6 @@ public class View {
         mostrarMensaje("    1) Delegations");
         mostrarMensaje("    2) Athletes");
         mostrarMensaje("    3) Competitions");
-        //la única linea que cambia es la 4, segun haya competiciones o no
         if (simulacionDisponible) {
             mostrarMensaje("    4) Simulate Olympic Games");
         } else {
@@ -97,8 +101,8 @@ public class View {
     }
 
     /**
-     * Muestra el submenú de delegaciones y pide una opción.
-     * @return la opción elegida (0 a 2)
+     * dibuja el submenu de delegaciones y pide la opcion
+     * @return la opcion elegida (0 a 2)
      */
     public int mostrarMenuDelegaciones() {
         mostrarMensaje("");
@@ -114,8 +118,8 @@ public class View {
     }
 
     /**
-     * Muestra el submenú de atletas y pide una opción.
-     * @return la opción elegida (0 a 3)
+     * dibuja el submenu de atletas y pide la opcion
+     * @return la opcion elegida (0 a 3)
      */
     public int mostrarMenuAtletas() {
         mostrarMensaje("");
@@ -132,9 +136,9 @@ public class View {
     }
 
     /**
-     * Muestra las delegaciones numeradas y pide cuál ver.
-     * @param delegaciones delegaciones a mostrar
-     * @return la posición elegida en la lista (1 a N), o 0 para volver
+     * lista las delegaciones numeradas y pide cual quiere ver
+     * @param delegaciones las que se muestran
+     * @return la posicion elegida (1 a N), o 0 para volver
      */
     public int mostrarListaDelegaciones(List<Delegation> delegaciones) {
         mostrarMensaje("");
@@ -147,17 +151,15 @@ public class View {
         mostrarMensaje("    0) Back");
         mostrarMensaje("");
 
-        //el rango va de 0 (volver) hasta la ultima delegacion
         return leerOpcion(0, delegaciones.size());
     }
 
     /**
-     * Muestra el detalle de una delegación: código, nombre, medallas y atletas.
-     * @param delegacion delegación a mostrar
-     * @param atletas atletas que pertenecen a la delegación
+     * escribe la ficha de una delegacion: codigo, nombre, medallas y sus atletas
+     * @param delegacion la delegacion que se muestra
+     * @param atletas los atletas que pertenecen a ella
      */
     public void mostrarDelegacion(Delegation delegacion, List<Athlete> atletas) {
-        //cabecera con el codigo y el nombre, y debajo las tres medallas
         mostrarMensaje("");
         mostrarMensaje("-| " + delegacion.getCode() + " | " + delegacion.getName() + " |-");
         mostrarMensaje("    Gold: " + delegacion.getGoldMedals());
@@ -173,8 +175,8 @@ public class View {
     }
 
     /**
-     * Muestra el medallero en forma de tabla.
-     * @param delegaciones delegaciones ya ordenadas por medallas
+     * dibuja el medallero como una tabla
+     * @param delegaciones las delegaciones ya ordenadas por medallas
      */
     public void mostrarMedallero(List<Delegation> delegaciones) {
         //linea separadora de la tabla y con el ancho de cada columna
@@ -199,8 +201,8 @@ public class View {
     }
 
     /**
-     * Pide el nombre del atleta.
-     * @return el nombre escrito
+     * pregunta el nombre del atleta
+     * @return lo que escribe el usuario
      */
     public String pedirNombre() {
         mostrarMensaje("");
@@ -209,19 +211,18 @@ public class View {
     }
 
     /**
-     * Pide la fecha de nacimiento como texto. No la valida: lo hace el manager.
+     * pregunta la fecha de nacimiento y la devuelve como texto, sin comprobarla (eso lo hace el manager)
      * @return el texto escrito
      */
     public String pedirFecha() {
-        //pedri la fecha de nacimiento
         System.out.print("Date of birth (DD/MM/YYYY): ");
         return scanner.nextLine();
     }
 
     /**
-     * Muestra las delegaciones y deja elegir una.
-     * @param delegaciones delegaciones disponibles
-     * @return la delegación elegida, o null si el usuario cancela
+     * lista las delegaciones y deja elegir una
+     * @param delegaciones las que se pueden elegir
+     * @return la delegacion elegida, o null si cancela
      */
     public Delegation elegirDelegacion(List<Delegation> delegaciones) {
         mostrarMensaje("");
@@ -236,7 +237,6 @@ public class View {
         mostrarMensaje("");
 
         int option = leerOpcion(0, delegaciones.size());
-        //0 es cancelar, asi que no hay delegacion que devolver
         if (option == 0) {
             return null;
         }
@@ -245,8 +245,8 @@ public class View {
     }
 
     /**
-     * Muestra los perfiles y pide uno.
-     * @return 1 Balanced, 2 Power, 3 Endurance, 4 Technical, o 0 para cancelar
+     * lista los 4 perfiles y pide uno
+     * @return 1 Balanced, 2 Power, 3 Endurance, 4 Technical, o 0 si cancela
      */
     public int elegirPerfil() {
         mostrarMensaje("");
@@ -265,25 +265,23 @@ public class View {
     }
 
     /**
-     * Pide el texto de búsqueda de atletas. ENTER sin escribir devuelve texto vacío.
+     * pregunta que atleta buscar. si pulsa enter sin escribir, devuelve texto vacio
      * @return el texto escrito
      */
     public String pedirBusqueda() {
         mostrarMensaje("");
         System.out.print("Enter a search term or press ENTER to show all athletes: ");
-        //si pulsa enter sin escribir, nextLine devuelve texto vacio
         return scanner.nextLine();
     }
 
     /**
-     * Muestra los atletas con el nombre de su delegación y deja elegir uno.
-     * @param atletas atletas a mostrar
-     * @param delegaciones delegaciones, para poner el nombre de la delegación de cada atleta
-     * @return el atleta elegido, o null si no hay atletas o el usuario elige volver
+     * lista los atletas con el nombre de su delegacion al lado y deja elegir uno
+     * @param atletas los atletas que se muestran
+     * @param delegaciones las delegaciones, para poner el nombre de la de cada atleta
+     * @return el atleta elegido, o null si no hay ninguno o elige volver
      */
     public Athlete elegirAtleta(List<Athlete> atletas, List<Delegation> delegaciones) {
         mostrarMensaje("");
-        //si la busqueda no ha encontrado hay mensaje de error
         if (atletas.isEmpty()) {
             mostrarMensaje("No athletes found.");
             return null;
@@ -291,7 +289,6 @@ public class View {
 
         for (int i = 0; i < atletas.size(); i++) {
             Athlete athlete = atletas.get(i);
-            //junto a cada atleta se pone el nombre de su delegacion
             mostrarMensaje("    " + (i + 1) + ") " + athlete.getName() + " - "
                     + delegationName(athlete.getDelegationCode(), delegaciones));
         }
@@ -307,9 +304,9 @@ public class View {
     }
 
     /**
-     * Muestra el detalle de un atleta: id, nombre, delegación, fecha, perfil y atributos.
-     * @param atleta atleta a mostrar
-     * @param delegacion delegación del atleta
+     * escribe la ficha de un atleta: id, nombre, delegacion, fecha, perfil y atributos
+     * @param atleta el atleta que se muestra
+     * @param delegacion la delegacion a la que pertenece
      */
     public void mostrarAtleta(Athlete atleta, Delegation delegacion) {
         //pasa de TECHNICAL a solo la primera letra tal cual y el resto en minuscula
@@ -333,12 +330,11 @@ public class View {
     }
 
     /**
-     * Pide una confirmación al usuario (y/n) y repite hasta que responda una de las dos.
-     * @param mensaje pregunta a mostrar
-     * @return true si responde y, false si responde n
+     * hace una pregunta de si o no (y/n) y la repite hasta que contesten bien
+     * @param mensaje la pregunta
+     * @return true si contesta y, false si contesta n
      */
     public boolean pedirConfirmacion(String mensaje) {
-        //no sale del bucle hasta que conteste y o n
         while (true) {
             mostrarMensaje("");
             System.out.print(mensaje + " (y/n): ");

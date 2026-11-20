@@ -14,6 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * pide cosas a la view y se las pasa a los managers y muestra el resultado
+ */
 public class Controller {
 
     //opciones del menu principal
@@ -40,6 +43,13 @@ public class Controller {
     private AthleteManager athleteManager;
     private CompetitionManager competitionManager;
 
+    /**
+     * guarda la view y los managers que le da el main
+     * @param view para mostrar y pedir cosas al usuario
+     * @param delegationManager la logica de las delegaciones
+     * @param athleteManager la logica de los atletas
+     * @param competitionManager la logica de las competiciones
+     */
     public Controller(View view, DelegationManager delegationManager,
                       AthleteManager athleteManager, CompetitionManager competitionManager) {
         //llegan ya creados desde el main, aqui no se hace ningun new
@@ -49,6 +59,10 @@ public class Controller {
         this.competitionManager = competitionManager;
     }
 
+    /**
+     * da la bienvenida y mira que delegations.json este bien
+     * @return true si el programa puede arrancar, false si hay que cerrarlo
+     */
     public boolean comprobarFicheros() {
         view.mostrarMensaje("Welcome to LA28 Games Lab.");
         view.mostrarMensaje("The Olympics Simulator.");
@@ -61,16 +75,17 @@ public class Controller {
             return true;
         }
 
-        //si falla devolvemos false y el main no arranca el menu
         view.mostrarError("The delegations.json file can't be accessed.");
         view.mostrarMensaje("Shutting down...");
         return false;
     }
 
+    /**
+     * el bucle del menu principal y no para hasta que elijan salir
+     */
     public void run() {
         int option;
 
-        //bucle del menu principal q se repite hasta que elijan salir
         do {
             //se pregunta en cada vuelta porque pueden haber añadido o borrado competiciones
             boolean simulationAvailable = competitionManager.hayCompeticiones();
@@ -94,6 +109,9 @@ public class Controller {
         } while (option != EXIT);
     }
 
+    /**
+     * el submenu de delegaciones
+     */
     public void menuDelegaciones() {
         int option;
 
@@ -111,6 +129,9 @@ public class Controller {
         } while (option != BACK);
     }
 
+    /**
+     * saca la lista de delegaciones y, si eligen una, su ficha con sus atletas
+     */
     public void listarDelegaciones() {
         //el manager da la lista ya ordenada por nombre
         List<Delegation> delegations = delegationManager.listarDelegaciones();
@@ -129,6 +150,9 @@ public class Controller {
         }
     }
 
+    /**
+     * muestra la tabla del medallero
+     */
     public void mostrarMedallero() {
         //el manager ordena por medallas y la view dibuja la tabla
         List<Delegation> delegations = delegationManager.obtenerMedallero();
@@ -137,6 +161,9 @@ public class Controller {
         view.esperarEnter();
     }
 
+    /**
+     * el submenu de atletas
+     */
     public void menuAtletas() {
         int option;
 
@@ -153,8 +180,10 @@ public class Controller {
         } while (option != BACK);
     }
 
+    /**
+     * pide los datos de un atleta nuevo y lo guarda. se puede cancelar al elegir delegacion o perfil
+     */
     public void registrarAtleta() {
-        //los datos se piden uno a uno a la view
         String name = view.pedirNombre();
 
         //se repite hasta que la fecha sea valida (el manager devuelve null si no lo es)
@@ -170,7 +199,6 @@ public class Controller {
             return;
         }
 
-        //el 0 tambien es cancelar
         int profileOption = view.elegirPerfil();
         if (profileOption == BACK) {
             return;
@@ -189,8 +217,10 @@ public class Controller {
         view.esperarEnter();
     }
 
+    /**
+     * busca atletas por nombre, deja elegir uno y muestra su ficha
+     */
     public void listarAtletas() {
-        //buscar y elegir uno de la lista y mostrar-lo
         String search = view.pedirBusqueda();
         List<Athlete> athletes = athleteManager.buscarAtletas(search);
         List<Delegation> delegations = delegationManager.listarDelegaciones();
@@ -207,8 +237,10 @@ public class Controller {
         }
     }
 
+    /**
+     * busca y elige un atleta, lo quita de las competicionesvy tambien resta las medallas que eso anula y lo borra del fichero
+     */
     public void eliminarAtleta() {
-        //el principio es igual que listar que es buscar y elegir un atleta
         String search = view.pedirBusqueda();
         List<Athlete> athletes = athleteManager.buscarAtletas(search);
         List<Delegation> delegations = delegationManager.listarDelegaciones();
@@ -240,7 +272,6 @@ public class Controller {
                 }
             }
 
-            //y se borra del fichero de atletas
             athleteManager.borrarAtleta(athlete.getId());
             view.mostrarMensaje("Athlete deleted successfully.");
         } else {
@@ -249,22 +280,27 @@ public class Controller {
         view.esperarEnter();
     }
 
+    
     public void menuCompeticiones() {
         // TODO
     }
 
+    
     public void cargarCompeticiones() {
         // TODO
     }
 
+    
     public void listarCompeticiones() {
         // TODO
     }
 
+    
     public void eliminarCompeticion() {
         // TODO
     }
 
+    
     public void simularJuegos() {
         // TODO
     }

@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ *  valida datos, y despues ya o crea o busca o borra atletas
+ */
 public class AthleteManager {
 
     //formato dd/MM/aaaa en modo estricto, asi el 31/02 no vale
@@ -18,14 +21,18 @@ public class AthleteManager {
 
     private AthleteJSONDAO dao;
 
+    /**
+     * guarda el dao con el que leera y escribira los atletas
+     * @param dao el acceso al fichero de atletas
+     */
     public AthleteManager(AthleteJSONDAO dao) {
         this.dao = dao;
     }
 
     /**
-     * Convierte un texto dd/MM/aaaa en fecha.
-     * @param texto fecha escrita por el usuario
-     * @return la fecha, o null si no es una fecha válida
+     * pasa un texto dd/MM/aaaa a fecha
+     * @param texto la fecha tal como la escribio el usuario
+     * @return la fecha, o null si no es valida
      */
     public LocalDate validarFechaNacimiento(String texto) {
         try {
@@ -36,9 +43,9 @@ public class AthleteManager {
     }
 
     /**
-     * Convierte la opción del menú de perfiles en un Profile.
+     * traduce el numero del menu de perfiles al perfil que le toca
      * @param opcion 1 Balanced, 2 Power, 3 Endurance, 4 Technical
-     * @return el perfil, o null si la opción no es válida
+     * @return el perfil, o null si el numero no vale
      */
     public Profile perfilAtleta(int opcion) {
         switch (opcion) {
@@ -56,17 +63,16 @@ public class AthleteManager {
     }
 
     /**
-     * Crea un atleta nuevo (id y atributos automáticos) y lo guarda.
+     * crea un atleta nuevo (el id y los atributos se generan solos) y lo guarda en el fichero
      * @param nombre nombre del atleta
      * @param fechaNacimiento fecha de nacimiento
-     * @param codigoDelegacion código de su delegación
+     * @param codigoDelegacion codigo de su delegacion
      * @param perfil perfil del atleta
-     * @return el atleta guardado, o null si ya existe uno con ese nombre en la delegación
+     * @return el atleta guardado, o null si en esa delegacion ya hay uno con ese nombre
      */
     public Athlete guardarAtleta(String nombre, LocalDate fechaNacimiento, String codigoDelegacion, Profile perfil) {
         List<Athlete> athletes = dao.cargarAtletas();
 
-        //si ya hay uno con ese nombre en la delegacion no se guarda
         for (Athlete athlete : athletes) {
             if (athlete.getDelegationCode().equals(codigoDelegacion)
                     && athlete.getName().equalsIgnoreCase(nombre)) {
@@ -74,7 +80,6 @@ public class AthleteManager {
             }
         }
 
-        //el id aleatorio pero en orden de uno en uno crece y los 5 atributos
         Random random = new Random();
         Athlete newAthlete = new Athlete(nextId(athletes), nombre, fechaNacimiento, codigoDelegacion, perfil, randomAttribute(random), randomAttribute(random), randomAttribute(random), randomAttribute(random), randomAttribute(random));
         dao.escribirAtleta(newAthlete);
@@ -82,9 +87,9 @@ public class AthleteManager {
     }
 
     /**
-     * Busca atletas cuyo nombre contenga el texto (sin distinguir mayúsculas).
-     * @param texto texto a buscar; vacío devuelve todos los atletas
-     * @return atletas que coinciden
+     * saca los atletas que coincidan con el nombre que te dicen de buscar  y no importan lsa mayusculas
+     * @param texto lo que se busca; si esta vacio salen todos
+     * @return los atletas que coinciden
      */
     public List<Athlete> buscarAtletas(String texto) {
         List<Athlete> found = new ArrayList<>();
@@ -97,13 +102,12 @@ public class AthleteManager {
     }
 
     /**
-     * Devuelve los atletas de una delegación.
-     * @param codigoDelegacion código de la delegación
-     * @return atletas de esa delegación
+     * da los atletas que pertenecen a una delegacion
+     * @param codigoDelegacion codigo de la delegacion
+     * @return los atletas de esa delegacion
      */
     public List<Athlete> atletasDeDelegacion(String codigoDelegacion) {
         List<Athlete> found = new ArrayList<>();
-        //nos quedamos solo con los de esa delegacion
         for (Athlete athlete : dao.cargarAtletas()) {
             if (athlete.getDelegationCode().equals(codigoDelegacion)) {
                 found.add(athlete);
@@ -113,16 +117,16 @@ public class AthleteManager {
     }
 
     /**
-     * Elimina un atleta del sistema.
-     * @param idAtleta identificador del atleta
+     * borra al atleta del fichero
+     * @param idAtleta id del atleta a borrar
      */
     public void borrarAtleta(String idAtleta) {
         dao.eliminarAtleta(idAtleta);
     }
 
     /**
-     * Busca un atleta por su identificador.
-     * @param idAtleta identificador del atleta
+     * busca un atleta por su id
+     * @param idAtleta el id que se busca
      * @return el atleta, o null si no existe
      */
     public Athlete buscarPorId(String idAtleta) {

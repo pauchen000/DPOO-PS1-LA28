@@ -6,27 +6,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * la logica de las delegaciones: ordena, busca y cambia medallas
+ */
 public class DelegationManager {
 
     //solo guardamos el dao, las listas se piden al fichero cada vez que hacen falta
     private DelegationJSONDAO dao;
 
+    /**
+     * guarda el dao con el que leera y escribira las delegaciones
+     * @param dao el acceso al fichero de delegaciones
+     */
     public DelegationManager(DelegationJSONDAO dao) {
         this.dao = dao;
     }
 
     /**
-     * Comprueba que el fichero de delegaciones existe y es correcto.
+     * pregunta al dao si delegations.json esta bien
      * @return true si el programa puede arrancar
      */
     public boolean comprobarFichero() {
-        //se lo preguntamos al dao, que es quien conoce el fichero
         return dao.existeFichero();
     }
 
     /**
-     * Devuelve todas las delegaciones ordenadas alfabéticamente por nombre.
-     * @return lista de delegaciones
+     * da todas las delegaciones ordenadas por nombre, de la a a la z
+     * @return la lista ordenada
      */
     public List<Delegation> listarDelegaciones() {
         //pedimos las delegaciones al fichero
@@ -47,9 +53,9 @@ public class DelegationManager {
     }
 
     /**
-     * Devuelve las delegaciones ordenadas como un medallero:
-     * más oros, luego más platas, luego más bronces y, si empatan, por nombre.
-     * @return lista de delegaciones ordenada
+     * da las delegaciones como un medallero: primero las que tienen mas oros, luego platas,
+     * luego bronces y, si siguen empatadas, por nombre
+     * @return la lista ordenada
      */
     public List<Delegation> obtenerMedallero() {
         List<Delegation> delegations = dao.cargarDelegaciones();
@@ -66,25 +72,22 @@ public class DelegationManager {
     }
 
     /**
-     * Busca una delegación por su código.
-     * @param codigo código de la delegación (DLG-XXX)
-     * @return la delegación, o null si no existe
+     * busca una delegacion a partir de su codigo
+     * @param codigo codigo de la delegacion (DLG-XXX)
+     * @return la delegacion, o null si no existe
      */
     public Delegation buscarPorCodigo(String codigo) {
-        //cargamos del fichero y buscamos con el metodo privado
         return findByCode(dao.cargarDelegaciones(), codigo);
     }
 
     /**
-     * Resta las medallas de un podio. Si alguna delegación no existe o no tiene
-     * esa medalla, no cambia nada.
-     * @param podio medalla y código de la delegación que la tiene
+     * quita las medallas de un podio. si alguna no se puede quitar, no se quita ninguna
+     * @param podio medalla y codigo de la delegacion que la tenia
      * @return true si se ha restado todo, false si no se ha podido
      */
     public boolean restarMedallas(Map<Medal, String> podio) {
         List<Delegation> delegations = dao.cargarDelegaciones();
 
-        //primero se comprueba todo, para no dejar el podio a medias
         for (Map.Entry<Medal, String> entry : podio.entrySet()) {
             Delegation delegation = findByCode(delegations, entry.getValue());
             //si no existe la delegacion o no tiene esa medalla, paramos sin tocar nada
@@ -103,8 +106,8 @@ public class DelegationManager {
     }
 
     /**
-     * Suma las medallas de un podio a las delegaciones indicadas.
-     * @param podio medalla y código de la delegación que la gana
+     * anade cada medalla del podio a su delegacion y guarda los cambios
+     * @param podio medalla y codigo de la delegacion que la gana
      */
     public void sumarMedallas(Map<Medal, String> podio) {
         List<Delegation> delegations = dao.cargarDelegaciones();
@@ -115,16 +118,14 @@ public class DelegationManager {
                 delegation.addMedal(entry.getKey());
             }
         }
-        //al terminar guardamos los cambios en el fichero
         dao.guardarDelegaciones(delegations);
     }
 
     /**
-     * Pone a cero las medallas de todas las delegaciones.
+     * deja a cero las medallas de todas las delegaciones
      */
     public void reiniciarMedallas() {
         List<Delegation> delegations = dao.cargarDelegaciones();
-        //ponemos a cero cada delegacion y luego guardamos todo de una vez
         for (Delegation delegation : delegations) {
             delegation.resetMedals();
         }
