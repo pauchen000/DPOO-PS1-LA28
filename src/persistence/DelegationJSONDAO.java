@@ -63,7 +63,7 @@ public class DelegationJSONDAO {
      * @param delegaciones la lista que se guarda
      */
     public void guardarDelegaciones(List<Delegation> delegaciones) {
-        //este gson escribe el json con sangrias para que se lea bien
+        //este gson escribe el json con tabulaciones para que se lea bien
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileWriter writer = new FileWriter(DELEGATIONS_FILE)) {
             gson.toJson(delegaciones, writer);
