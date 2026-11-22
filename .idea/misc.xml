@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ProjectRootManager" version="2" project-jdk-name="openjdk-27" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_27" project-jdk-name="openjdk-27" project-jdk-type="JavaSDK">
+    <output url="file://$USER_HOME$/Desktop/Cerebro/Obsidian Vault/10-Universidad/Disseny i programació orientats a objectes/DPOO-AC3-2026-11-05/DPOO-AC3-Base-2627/out" />
+  </component>
 </project>
